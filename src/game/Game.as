@@ -30,6 +30,34 @@ public class Game {
         createRandomTrees(8);
     }
 
+    public function setCells(cellsDefinitions:Vector.<Array>): void {
+        var tree:Tree;
+        for (var i:int=0; i<_fieldSize; i++) {
+            _cells[i] = new Vector.<GameCell>(_fieldSize);
+            for (var j:int=0; j<_fieldSize; j++) {
+                _cells[i][j] = new GameCell(i, j);
+                switch (cellsDefinitions[i][j]) {
+                    case "1":
+                        tree = new Tree();
+                        tree.setAge(1);
+                        _cells[i][j].gameObject = tree;
+                        break;
+                    case "2":
+                        tree = new Tree();
+                        tree.setAge(2);
+                        _cells[i][j].gameObject = tree;
+                        break;
+                    case "3":
+                        tree = new Tree();
+                        tree.setAge(3);
+                        _cells[i][j].gameObject = tree;
+                        break;
+                }
+            }
+        }
+    }
+
+
     private function createRandomTrees(treeQnt:int):void {
         var min:int = 0;
         var max:int = _fieldSize - 1;

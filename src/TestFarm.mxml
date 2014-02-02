@@ -6,6 +6,38 @@
         <c:GameCanvas id="gameCanvas" width="100%" height="100%">
 
         </c:GameCanvas>
+        <s:HGroup>
+            <s:Label>Enter your name</s:Label>
+            <s:TextInput id="UserName" width="200">
+            </s:TextInput>
+            <s:Button id="LoadButton" label="Load Game" click="loadGame(event)" width="100" height="25"></s:Button>
+            <s:Button id="SaveButton" label="Save Game" click="saveGame(event)" width="100" height="25"></s:Button>
+        </s:HGroup>
     </s:VGroup>
+    <fx:Script><![CDATA[
+        import mx.events.ItemClickEvent;
 
+        protected function loadGame(event:MouseEvent):void {
+            if (UserName.text == "") {
+                return;
+            }
+
+            GameCanvas.loader = new URLLoader();
+            GameCanvas.loader.addEventListener(Event.COMPLETE,gameCanvas.onDataLoaded);
+            var b:URLRequest = new URLRequest("http://127.0.0.1:1337/" + UserName.text);
+            GameCanvas.loader.dataFormat = "text";
+            GameCanvas.loader.load(b);
+        }
+
+        protected function saveGame(event:MouseEvent):void {
+            if (UserName.text == "") {
+                return;
+            }
+
+            GameCanvas.loader = new URLLoader();
+            var b:URLRequest = new URLRequest("http://127.0.0.1:1337/" + gameCanvas.getGameDataSerialized(UserName.text));
+            GameCanvas.loader.dataFormat = "text";
+            GameCanvas.loader.load(b);
+        }
+        ]]></fx:Script>
 </s:WindowedApplication>

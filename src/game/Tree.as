@@ -24,5 +24,29 @@ public class Tree extends GameObject{
             _graphicData = Images.treeImage.bitmapData;
         }
     }
+
+    public function setAge(age:int): void{
+        switch (age) {
+            case 1:
+                _graphicData == Images.treeSmallImage.bitmapData;
+                break;
+            case 2:
+                _graphicData = Images.treeMiddleImage.bitmapData;
+                break;
+            case 3:
+                _graphicData = Images.treeImage.bitmapData;
+                break;
+        }
+    }
+
+    public function getAge(): int {
+        if (_graphicData == Images.treeSmallImage.bitmapData) {
+            return 1;
+        } else if (_graphicData == Images.treeMiddleImage.bitmapData) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
 }
 }

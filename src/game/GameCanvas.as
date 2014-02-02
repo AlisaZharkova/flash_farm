@@ -6,21 +6,21 @@
  * To change this template use File | Settings | File Templates.
  */
 package game {
-import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.net.URLLoader;
 
 import spark.components.BorderContainer;
-import spark.primitives.Rect;
 
 public class GameCanvas extends BorderContainer {
      private var _game:Game;
      private static const _step:int = 24; //hardcore is here :)
      private var _bufferBitmap: BitmapData;
+
+    public static var loader:URLLoader;
 
     public function GameCanvas() {
         addEventListener(Event.ADDED_TO_STAGE, function(e:Event):void {
@@ -31,6 +31,45 @@ public class GameCanvas extends BorderContainer {
 
         _game = new Game();
         _bufferBitmap = new BitmapData(600, 600, true);
+    }
+
+    public function onDataLoaded (e:Event):void {
+        if (loader.data == "") {
+            return;
+        }
+
+        var strings:Vector.<Array> = new Vector.<Array>(10);
+        var first_array:Array = new Array(10);
+        first_array = loader.data.split("-");
+        for (var i:int; i<10; i++) {
+            strings[i] = first_array[i].split("+");
+        }
+
+        _game.setCells(strings);
+    }
+
+    public function getGameDataSerialized(username:String): String {
+        var cells:Vector.<Vector.<GameCell>>;
+        cells = _game.cells;
+        var result:String = "savegame";
+
+        for (var i:int = 0; i<10; i++) {
+            for (var j:int = 0; j<10; j++) {
+                if (cells[i][j].gameObject) {
+                    result += (cells[i][j].gameObject as Tree).getAge();
+                } else {
+                    result += 0;
+                }
+                if (j<9) {
+                    result += "+";
+                }
+            }
+            if (i<9) {
+                result += "-";
+            }
+        }
+
+         return result + username;
     }
 
     private function clickHandler(event:MouseEvent):void {
